@@ -1,3 +1,28 @@
+```
+FreeRTOS
+ ├─ 核心概念
+ │    ├─ 任务：Running / Ready / Blocked / Suspended
+ │    ├─ 调度器：优先级调度 + 时间片轮转
+ │    ├─ Tick：内核“滴答”，管理延时和调度
+ │    └─ 通信：队列(传数据)、信号量(同步)、互斥量(资源保护)、事件组(多事件)
+ │
+ ├─ 基本 API
+ │    ├─ 任务：xTaskCreate / vTaskDelete / vTaskDelay
+ │    ├─ 队列：xQueueCreate / xQueueSend / xQueueReceive
+ │    └─ 信号量：xSemaphoreCreateBinary / xSemaphoreCreateMutex
+ │
+ ├─ 使用流程
+ │    1. 初始化硬件
+ │    2. 创建任务 (xTaskCreate)
+ │    3. 启动调度 (vTaskStartScheduler)
+ │    4. 任务循环运行
+ │
+ └─ 示例
+      ├─ LED 闪烁任务
+      └─ 串口打印任务
+```
+
+
 FreeRTOS
  ├─ 核心概念
  │    ├─ 任务（Task）
