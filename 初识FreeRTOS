@@ -1,0 +1,96 @@
+FreeRTOS
+ ├─ 核心概念
+ │    ├─ 任务（Task）
+ │    │    ├─ Running（运行）
+ │    │    ├─ Ready（就绪）
+ │    │    ├─ Blocked（阻塞）
+ │    │    └─ Suspended（挂起）
+ │    │
+ │    │    ├─ 💡 理解技巧
+ │    │    │    ├─ Running：现在正在跑
+ │    │    │    ├─ Ready：随时可以跑
+ │    │    │    ├─ Blocked：等一会才能跑
+ │    │    │    └─ Suspended：先休息，别人叫才跑
+ │
+ │    ├─ 调度器（Scheduler）
+ │    │    ├─ 定义：决定哪个任务什么时候运行
+ │    │    ├─ 类型
+ │    │    │    ├─ 优先级调度：高优先级任务先运行
+ │    │    │    └─ 时间片轮转：同级任务轮流运行
+ │    │    └─ 💡 理解技巧
+ │    │         ├─ Scheduler 就像“交通指挥员”，分配 CPU 给不同任务
+ │
+ │    ├─ Tick（时钟节拍）
+ │    │    ├─ 定义：FreeRTOS 内核通过 Tick 中断管理时间
+ │    │    ├─ 用途
+ │    │    │    ├─ 任务延时（vTaskDelay）
+ │    │    │    └─ 时间片轮转调度
+ │    │    └─ 💡 理解技巧
+ │    │         ├─ Tick 就像计时器，每“滴答”一次，调度器就能判断是否切换任务
+ │
+ │    └─ 任务间通信
+ │         ├─ 队列（Queue）：安全传递数据
+ │         │    ├─ 示例：一个任务产生数据，另一个任务读取数据
+ │         ├─ 信号量（Semaphore）：同步任务、控制资源访问
+ │         │    ├─ 二值信号量：事件通知
+ │         │    └─ 互斥量(Mutex)：保护共享资源，如串口或LCD
+ │         └─ 事件组（Event Group）：管理多个事件标志
+ │
+ │         ├─ 💡 理解技巧
+ │         │    ├─ 队列 = 邮箱，任务可以安全收发数据
+ │         │    ├─ 信号量 = 绿灯/红灯，控制谁能做事
+ │         │    └─ 互斥量 = 钥匙，避免多人同时使用同一资源
+ │
+ ├─ 基本 API
+ │    ├─ 任务管理
+ │    │    ├─ xTaskCreate()：创建任务
+ │    │    ├─ vTaskDelete()：删除任务
+ │    │    └─ vTaskDelay()：延时任务
+ │    ├─ 队列管理
+ │    │    ├─ xQueueCreate()：创建队列
+ │    │    ├─ xQueueSend()：发送数据
+ │    │    └─ xQueueReceive()：接收数据
+ │    └─ 信号量/互斥量
+ │         ├─ xSemaphoreCreateBinary()：创建二值信号量
+ │         └─ xSemaphoreCreateMutex()：创建互斥量
+ │
+ │    ├─ 💡 理解技巧
+ │    │    ├─ API = 工具箱，每个工具都有明确用途
+ │    │    ├─ 任务 API 控制任务生命周期
+ │    │    ├─ 队列 API 控制任务间数据交换
+ │    │    └─ 信号量/互斥量 API 控制同步与资源保护
+ │
+ ├─ 使用流程
+ │    ├─ 1. 初始化硬件（GPIO、串口、传感器等）
+ │    ├─ 2. 创建任务（xTaskCreate）
+ │    ├─ 3. 启动调度器（vTaskStartScheduler）
+ │    └─ 4. 任务循环执行（while(1)）
+ │
+ │    ├─ 💡 理解技巧
+ │    │    ├─ main() 相当于准备工厂
+ │    │    ├─ 创建任务 = 招聘员工
+ │    │    ├─ 启动调度器 = 打开生产线
+ │    │    └─ 任务循环 = 员工按岗位持续工作
+ │
+ └─ 示例
+      ├─ LED 闪烁任务
+      │    ├─ 功能：每隔 500ms 翻转 LED
+      │    ├─ 核心代码：
+      │    │    void Task_LED(void *pvParameters) {
+      │    │        while(1) {
+      │    │            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+      │    │            vTaskDelay(500 / portTICK_PERIOD_MS);
+      │    │        }
+      │    │    }
+      │    └─ 💡 理解技巧：最简单的“Hello World”任务，熟悉任务创建、延时、循环执行
+      │
+      └─ 串口打印任务
+           ├─ 功能：周期性打印数据到串口
+           ├─ 核心代码：
+           │    void Task_UART(void *pvParameters) {
+           │        while(1) {
+           │            printf("Hello FreeRTOS!\n");
+           │            vTaskDelay(1000 / portTICK_PERIOD_MS);
+           │        }
+           │    }
+           └─ 💡 理解技巧：理解任务与外设结合，熟悉调度与延时
